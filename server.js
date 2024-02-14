@@ -14,6 +14,7 @@ const endpointSecret = "whsec_7de8e5a8ee8343e4cfeb41f68fdb220540647a06dbf09d014d
 
 const app = express();
 
+
 app.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
     const sig = request.headers['stripe-signature'];
 
@@ -71,6 +72,12 @@ app.use(cors());
 fs.readdirSync("./routes/").map((r) =>
     app.use("/api", require("./routes/" + r))
 )
+
+app.get("/test", (req, res) => {
+    res.json({
+        data: "hello"
+    });
+})
 
 mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
