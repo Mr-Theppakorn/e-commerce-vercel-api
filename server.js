@@ -10,10 +10,10 @@ const User = require('./models/user');
 const Product = require('./models/product');
 const Cart = require('./models/cart');
 const Order = require('./models/order');
-const endpointSecret = "whsec_7de8e5a8ee8343e4cfeb41f68fdb220540647a06dbf09d014d88252b7328627c";
+
+const endpointSecret = process.env.STRIPE_ENDPOINT_WEBHOOK_SECRET;
 
 const app = express();
-
 
 app.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
     const sig = request.headers['stripe-signature'];
