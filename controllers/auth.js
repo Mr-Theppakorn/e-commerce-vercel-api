@@ -44,7 +44,7 @@ exports.createUser = async (req, res, next) => {
 exports.getOrder = async (req, res, next) => {
     try {
 
-        const orders = await Order.find({})
+        const orders = await Order.find({ status: 'complete' })
             .sort("-createdAt")
             .populate("products.product");
         res.json(orders);
