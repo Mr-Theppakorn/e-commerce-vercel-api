@@ -20,7 +20,7 @@ exports.createPaymentSession = async (req, res, next) => {
             quantity: product.count,
         }));
 
-        const existingOrder = await Order.findOne({ orderBy: req.user._id, status: 'open' });
+        const existingOrder = await Order.findOne({ orderBy: user._id, status: 'open' });
 
         let newOrder;
 
@@ -34,7 +34,7 @@ exports.createPaymentSession = async (req, res, next) => {
             console.log('yes');
             newOrder = existingOrder;
         }
-        console.log(newOrder._id);
+       
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: productItems,
