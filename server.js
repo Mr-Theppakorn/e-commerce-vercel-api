@@ -10,11 +10,8 @@ const User = require('./models/user');
 const Product = require('./models/product');
 const Cart = require('./models/cart');
 const Order = require('./models/order');
-<<<<<<< HEAD
 const axios = require('axios');
-=======
 
->>>>>>> b81c8481546e8571bfa9e486bf8694915071cac7
 const endpointSecret = process.env.STRIPE_ENDPOINT_WEBHOOK_SECRET;
 
 const app = express();
