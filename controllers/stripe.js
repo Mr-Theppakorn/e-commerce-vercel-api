@@ -34,7 +34,11 @@ exports.createPaymentSession = async (req, res, next) => {
 
             newOrder = existingOrder;
         }
+<<<<<<< HEAD
 
+=======
+       
+>>>>>>> b81c8481546e8571bfa9e486bf8694915071cac7
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: productItems,
