@@ -160,7 +160,7 @@ exports.getOrder = async (req, res, next) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const order = await Order.find({ orderBy: user._id }).populate('products.product');
+        const order = await Order.find({ orderBy: user._id, status: 'complete' }).populate('products.product', 'paymentIntent');
         res.json(order);
     } catch (err) {
         console.log(err);

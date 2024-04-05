@@ -10,7 +10,8 @@ const User = require('./models/user');
 const Product = require('./models/product');
 const Cart = require('./models/cart');
 const Order = require('./models/order');
-const endpointSecret = "whsec_7de8e5a8ee8343e4cfeb41f68fdb220540647a06dbf09d014d88252b7328627c";
+const axios = require('axios');
+const endpointSecret = process.env.STRIPE_ENDPOINT_WEBHOOK_SECRET;
 
 const app = express();
 
@@ -73,10 +74,14 @@ fs.readdirSync("./routes/").map((r) =>
     app.use("/api", require("./routes/" + r))
 )
 
-app.get("/test", (req, res) => {
-    res.json({
-        data: "hello"
-    });
+
+app.post("/test", async (req, res) => {
+    try {
+        const obj = await axios.get(`https://api.steampowered.com/IPlayerService/GetAchievementsProgress/v1/?key=F3D32F6491CD7C4965EA850C1F167263&steamid=76561198010615256&appid=550`)
+        res.json(obj.data);
+    } catch (error) {
+        console.log(error.message);
+    }
 })
 
 mongoose.connect(process.env.DATABASE, {

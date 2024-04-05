@@ -1,5 +1,6 @@
 const cloudinary = require('cloudinary');
 const User = require('../models/user');
+const Product = require('../models/product');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -57,11 +58,11 @@ exports.uploadProfile = async (req, res, next) => {
 };
 
 
-exports.remove = (req, res, next) => {
-    const { public_id } = req.body;
-    console.log(public_id);
-    cloudinary.uploader.destroy(public_id, (err, result) => {
-        if (err) return res.json({ success: false, err });
-        res.send("Remove Done!");
-    })
+exports.remove = async (req, res, next) => {
+    const { public_id, _id } = req.body;
+    await cloudinary.uploader.destroy(public_id);
+    const product = await Product.findById(_id);
+    const image = product.images.filter(image => image.public_id !== public_id);
+    await Product.findByIdAndUpdate(_id, { $set: { images: image } }, { new: true });
+    res.json({ status: 'ok' });
 }

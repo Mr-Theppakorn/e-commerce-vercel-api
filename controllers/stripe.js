@@ -20,7 +20,7 @@ exports.createPaymentSession = async (req, res, next) => {
             quantity: product.count,
         }));
 
-        const existingOrder = await Order.findOne({ orderBy: req.user._id, status: 'open' });
+        const existingOrder = await Order.findOne({ orderBy: user._id, status: 'open' });
 
         let newOrder;
 
@@ -31,23 +31,21 @@ exports.createPaymentSession = async (req, res, next) => {
                 orderBy: user._id
             }).save();
         } else {
-            console.log('yes');
+
             newOrder = existingOrder;
         }
-        console.log(newOrder._id);
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: productItems,
             mode: "payment",
-            success_url: `http://localhost:5173/successfully/&order_id=${newOrder._id}`,
-            cancel_url: `http://localhost:5173/checkout`,
+            success_url: `https://e-commerce-client-liard.vercel.app/&order_id=${newOrder._id}`,
+            cancel_url: `https://e-commerce-client-liard.vercel.app/`,
             metadata: {
                 user_email: req.user.email
             },
         });
 
-
-        console.log(session);
         return res.json(session);
     } catch (err) {
         console.log(err);
@@ -69,7 +67,7 @@ exports.createPayment = async (req, res, next) => {
         } else {
             realTotal = Math.round(cartTotal)
         }
-        console.log(realTotal);
+
         const payment = await stripe.paymentIntents.create({
             amount: realTotal,
             currency: 'USD',
